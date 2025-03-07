@@ -144,6 +144,8 @@ cython_debug/
 /datasets/**/*
 /tmp/*
 /third_party/*
+!/third_party/.placeholder
+!/third_party/p2rank_2.5
 !/checkpoints/.placeholder
 !/datasets/**/.placeholder
 !/third_party/.placeholder

@@ -26,8 +26,8 @@ def parse_frontend(json_string: str, output_floder: str = "tmp/workflow") -> str
         "molecule_structure_request": {"query": "accession"},
         "protein_uniprot_request": {"query": "accession"},
         "protein_pdb_request": {"query": "accession"},
-        "pubchemid_search": {"query": "accession"}
-
+        "pubchemid_search": {"query": "accession"},
+        "molecule_property_prediction": {"dataset": "task"}
     }
     def get_createdata_node(node):
         node_dict = {}
@@ -45,10 +45,18 @@ def parse_frontend(json_string: str, output_floder: str = "tmp/workflow") -> str
     # just get id and description
     def get_tool_node(node):
         node_dict = {}
+        node_dict["value"] = {}
         id = node["id"]
         description = node["data"]["node"]["description"]
         node_dict["description"] = [description]
+        data_context = node["data"]["node"]["template"]
+        keys = list(data_context)
+        for key in keys:
+            if key in ["config", "molecule", "protein", "pocket", "text", "dataset", "query", "mutation", "indices", "threshold"] and data_context[key]["value"]:
+                node_dict["value"].update({key: data_context[key]["value"]})
         return node_dict
+
+
 
 
     def remove_duplicate_path(nodes):
@@ -131,7 +139,7 @@ def parse_frontend(json_string: str, output_floder: str = "tmp/workflow") -> str
     merge_nodes_list = path_nodes + new_path_nodes
 
     # remove paths containing path_keywords
-    path_keywords = ["MergeDataComponent", "ParseData", "ChatOutput", "ChatInput", "Image Output", "PharmolixCreateData"]
+    path_keywords = ["MergeDataComponent", "ParseData", "ChatOutput", "ChatInput", "Image Output", "PharmolixCreateData", "Image output"]
     merge_nodes_list_copy = copy.deepcopy(merge_nodes_list)
     for index in range(len(merge_nodes_list_copy) - 1, -1, -1):
         # print(index)
@@ -161,7 +169,7 @@ def parse_frontend(json_string: str, output_floder: str = "tmp/workflow") -> str
     yaml_dict["edges"] = []
     for node in path_nodes_list:
         node_info = tool_node_filted[node]
-        if 'value' in node_info.keys():
+        if 'value' in node_info.keys() and node_info["value"]:
             yaml_dict["tools"].append({"name": node.split("-")[0].lower(), "inputs": node_info["value"]})
         else:
             yaml_dict["tools"].append({"name": node.split("-")[0].lower()})
@@ -176,6 +184,7 @@ def parse_frontend(json_string: str, output_floder: str = "tmp/workflow") -> str
         if "inputs" in node and "model" in list(node["inputs"].keys()):
             node["inputs"].pop("model")
         if node["name"] in param_mapping:
+            print(node["name"])
             for key in list(node["inputs"].keys()):
                 if key in param_mapping[node["name"]]:
                     new_key = param_mapping[node["name"]][key]
@@ -267,7 +276,12 @@ class Workflow():
                         for key, value in self.nodes[u].inputs.items():
                             if key in ["molecule", "protein", "pocket"]:
                                 vis_process.append(f"--{key}")
-                                vis_process.append(value.save_binary())
+                                if key == "molecule":
+                                    vis_process.append(value.save_sdf())
+                                elif key == "protein":
+                                    vis_process.append(value.save_pdb())
+                                elif key == "pocket":
+                                    vis_process.append(alue.save_binary())
                         subprocess.Popen(vis_process).communicate()
                         outputs = open("./tmp/visualization_file.txt", "r").read()
                         outputs = [outputs], [outputs]

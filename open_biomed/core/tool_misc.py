@@ -18,6 +18,8 @@ class ImportPocket(Tool):
     def run(self, protein: Union[Protein, List[Protein]], indices: Union[List[int], List[List[int]]]) -> Tuple[List[Pocket], List[str]]:
         if isinstance(protein, Protein):
             protein = [protein]
+            if isinstance(indices, str):
+                indices = [int(i) - 1 for i in indices.split(";")]
             indices = [indices]
         pockets, files = [], []
         for i in range(len(protein)):

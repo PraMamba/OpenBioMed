@@ -94,10 +94,12 @@ def create_tool_input(data_type: str, value: str) -> Any:
         elif value.endswith(".pkl"):
             return Molecule.from_binary_file(value)
         else:
-            return Molecule.form_smiles(value)
+            return Molecule.from_smiles(value)
     elif data_type == "protein":
         if value.endswith(".pdb"):
             return Protein.from_pdb_file(value)
+        if os.path.exists(value.replace(".pkl", ".pdb")):
+            return Protein.from_pdb_file(value.replace(".pkl", ".pdb"))
         if value.endswith(".pkl"):
             return Protein.from_binary_file(value)
         else:

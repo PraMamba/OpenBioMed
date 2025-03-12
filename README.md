@@ -6,8 +6,6 @@
     <p>
 </h4>
 
-
-
 ## News 🎉
 
 
@@ -179,7 +177,7 @@ If you find our open-sourced code and models helpful to your research, please co
 
 ```
 @misc{OpenBioMed_code,
-      author={Luo, Yizhen and Yang, Kai and Siqi, Fan and Hong, Massimo and Nie, Zikun and Liu, Xing Yi and Zhao, Suyuan and Zhang, Jiahuan and Wu, Yushuai and Nie, Zaiqing},
+      author={Luo, Yizhen and Yang, Kai and Fan, Siqi and Hong, Massimo and Nie, Zikun and Luo, Wen and Xie, Ailin and Liu, Xing Yi and Zhao, Suyuan and Zhang, Jiahuan and Wu, Yushuai and Nie, Zaiqing},
       title={Code of OpenBioMed},
       year={2023},
       howpublished={\url{https://github.com/Pharmolix/OpenBioMed.git}}

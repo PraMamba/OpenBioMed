@@ -160,10 +160,10 @@ git checkout v1.0
 
 ```
 @misc{OpenBioMed_code,
-      author={Luo, Yizhen and Yang, Kai and Hong, Massimo and Liu, Xing Yi and Zhao, Suyuan and Zhang, Jiahuan and Wu, Yushuai and Nie, Zaiqing},
+      author={Luo, Yizhen and Yang, Kai and Fan, Siqi and Hong, Massimo and Nie, Zikun and Luo, Wen and Xie, Ailin and Liu, Xing Yi and Zhao, Suyuan and Zhang, Jiahuan and Wu, Yushuai and Nie, Zaiqing},
       title={Code of OpenBioMed},
       year={2023},
-      howpublished={\url{https://github.com/BioFM/OpenBioMed.git}}
+      howpublished={\url{https://github.com/Pharmolix/OpenBioMed.git}}
 }
 ```
 

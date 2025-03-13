@@ -133,7 +133,12 @@ python
 >>> nltk.download('wordnet')
 >>> nltk.download('omw-1.4')
 ```
+### docker
 
+Executing ./scripts/docker_run.sh directly will build the Docker image and run the container, launching the backend services on ports 8082 and 8083.
+```
+sh ./scripts/docker_run.sh
+```
 
 ## Tutorials
 

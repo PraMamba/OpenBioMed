@@ -116,7 +116,12 @@ python
 >>> nltk.download('wordnet')
 >>> nltk.download('omw-1.4')
 ```
+### docker
 
+直接运行 `./scripts/docker_run.sh`，就可以构建docker镜像并运行容器，并在端口8082和8083运行后端服务。
+```
+sh ./scripts/docker_run.sh
+```
 
 ## 使用指南
 

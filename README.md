@@ -6,10 +6,15 @@
     <p>
 </h4>
 
+![platform](images/platform.png)
+
+Feel free to use our **Agent Platform for Biomedicine and Life Science** at this [website](http://openbiomed.pharmolix.com)!
+
 ## News 🎉
 
 
-- [2025/03/07] 🔥 Released **OpenBioMed v2**. We present new features including additional downstream biomedical tasks, more flexible data APIs, and a user-friendly [online platform](http://openbiomed.pharmolix.com) for customizing workflows and LLM agents in solving complicated scientific research tasks. We also release a preview version of **PharmolixFM** (📃[Paper](), 🤖[Model](https://cloud.tsinghua.edu.cn/f/8f337ed5b58f45138659/), 📎[Citation](#to-cite-pharmolixfm)). BioMedGPT-R1 inference is currently supported, and fine-tuning will be available in this month!
+- [2025/03/07] 🔥We present **OpenBioMed Agent Platform** at this [website](http://openbiomed.pharmolix.com) to customize workflows and LLM agents (**AutoPilots**) in solving complicated scientific research tasks. **Tutorials** for using this platform are also [available](https://www.zybuluo.com/icycookies/note/2587490).
+- [2025/03/07] 🔥 Released **OpenBioMed v2**. We present new features including additional downstream biomedical tasks, more flexible data APIs, and advanced models. We also release a preview version of **PharmolixFM** (📃[Paper](), 🤖[Model](https://cloud.tsinghua.edu.cn/f/8f337ed5b58f45138659/), 📎[Citation](#to-cite-pharmolixfm)). BioMedGPT-R1 inference is currently supported, and fine-tuning will be available in this month!
 
 > PharmolixFM is an all-atom molecular foundation model jointly released by PharMolix Inc. and Institute of AI Industry Research (AIR), Tsinghua University. It unifies molecules, antibodies, and proteins by jointly modeling them at atom-level with cutting-edge non-autoregressive multi-modal generative models. PharmolixFM is capable of solving mutiple downstream tasks such as docking, structure-based drug design, peptide design, and molecular conformation generation. PharmolixFM achieves competitive performance with AlphaFold3 (83.9 vs 90.2, RMSD < 2Å) on protein-molecule docking (given pocket).
 

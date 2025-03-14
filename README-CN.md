@@ -6,9 +6,15 @@
     <p>
 </h4>
 
+![platform](images/platform.png)
+
+欢迎用户在[该网站](http://openbiomed.pharmolix.com)使用我们的生物医药智能体开发平台！
+
 ## 更新信息 🎉
 
-- [2025/03/07] 🔥 发布**OpenBioMed v2**. 我们在这次更新中适配了更多的生物医药下游任务，开放了更加易用的数据接口，并推出了一个用户友好的[在线平台](http://openbiomed.pharmolix.com)用于定制生物医药研究中的多工具协同工作流和基于大语言模型的智能体。同时，我们发布了试用版**PharmolixFM**模型（📃[技术报告](), 🤖[模型](https://cloud.tsinghua.edu.cn/f/8f337ed5b58f45138659/), 📎[引用](#to-cite-pharmolixfm)），并完成了BioMedGPT-R1模型的推理支持。我们预计于本月内开放BioMedGPT-R1的微调代码。
+- [2025/03/07] 🔥 发布**OpenBioMed生物医药智能体开发平台**，可通过[该链接](http://openbiomed.pharmolix.com)访问。该平台能帮助研发人员零门槛使用AI模型定制化自己的科学研究助手（**AutoPilot**）。平台的[使用文档](https://www.zybuluo.com/icycookies/note/2587490)已经同步发布。
+
+- [2025/03/07] 🔥 发布**OpenBioMed v2**. 我们在这次更新中适配了更多的生物医药下游任务，开放了更加易用的数据接口，并继承了更前沿的AI模型。同时，我们发布了试用版**PharmolixFM**模型（📃[技术报告](), 🤖[模型](https://cloud.tsinghua.edu.cn/f/8f337ed5b58f45138659/), 📎[引用](#to-cite-pharmolixfm)），并完成了BioMedGPT-R1模型的推理支持。我们预计于本月内开放BioMedGPT-R1的微调代码。
 
     > PharmolixFM是由水木分子与清华大学智能产业研究院联合研发的全原子基础大模型。该模型使用最先进的非自回归式多模态生成模型，在原子尺度上实现了对分子、抗体和蛋白质的联合建模。PharmolixFM能够适配多种下游任务，如分子对接、基于口袋的分子设计、抗体设计、分子构象生成等。在给定口袋位置的分子对接任务中，PharMolixFM的预测精度可与AlphaFold3媲美 (83.9 vs 90.2, RMSD < 2Å) 。
 

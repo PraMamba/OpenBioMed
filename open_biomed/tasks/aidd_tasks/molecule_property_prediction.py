@@ -180,11 +180,15 @@ class MoleculePropertyPredictionRegression(BaseTask):
     @staticmethod
     def get_monitor_cfg() -> Struct:
         return Struct(
-            name="val/rmse",
-            output_str="-{val_rmse:.4f}",
+            name="val/mae",
+            output_str="-{mae:.4f}",
             mode="min",
         )
-
+        # return Struct(
+        #     name="val/spearman",
+        #     output_str="-{val_spearman:.4f}",
+        #     mode="max",
+        # )
 
 class MoleculePropertyPredictionRegressionEvaluationCallback(pl.Callback):
     def __init__(self) -> None:

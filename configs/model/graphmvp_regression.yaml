@@ -10,12 +10,12 @@ model:
   
 
 dataset:
-  batch_size_train: 256
+  batch_size_train: 32
   batch_size_eval: 64
 
 train:
   max_epochs: 100
-  batch_size: 256
+  batch_size: 32
   ckpt_freq: 5
 
 evaluation:

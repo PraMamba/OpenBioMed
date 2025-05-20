@@ -42,12 +42,17 @@ DATASET_REGISTRY = {
             "SIDER": MoleculeNet,
             "MUV": MoleculeNet,
             "Toxcast": MoleculeNet,
+            "bbb_martins": MoleculeNet,
+            "cyp2c9_veith": MoleculeNet,
             # TODO: 以下是回归任务
             "FreeSolv": MoleculeNet,
             "ESOL": MoleculeNet,
             "Lipo": MoleculeNet,
             "qm7": MoleculeNet,
             "qm8": MoleculeNet,
-            "qm9": MoleculeNet
+            "qm9": MoleculeNet,
+            "caco2_wang": MoleculeNet,
+            "half_life_obach": MoleculeNet,
+            "ld50_zhu": MoleculeNet,
         }
 }

@@ -4,7 +4,7 @@ import torch, json
 import torch.nn as nn, torch.nn.functional as F
 from transformers import PreTrainedTokenizer, BertModel, BertTokenizer
 from open_biomed.data import Cell, Text
-from open_biomed.utils.cell_utils import BertModel as MedBertModel, LangCellDataCollatorForCellClassification as DataCollatorForCellClassification
+from OpenBioMed.open_biomed.models.cell.langcell.langcell_utils import BertModel as MedBertModel, LangCellDataCollatorForCellClassification as DataCollatorForCellClassification
 from open_biomed.utils.config import Config
 from open_biomed.utils.collator import Collator
 from open_biomed.utils.featurizer import Featurizer, Featurized

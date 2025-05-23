@@ -88,6 +88,8 @@ class MoleculePropertyPredictionEvaluationCallback(pl.Callback):
     ) -> None:
 
         y_true = np.squeeze(np.array(self.eval_dataset.labels), axis=1)
+
+        self.outputs = [torch.tensor(x) for x in self.outputs]
         
         # y_scores =  torch.unsqueeze(torch.tensor(self.outputs), dim=1).numpy()
         y_scores_tensor = torch.stack(self.outputs, dim=0)

@@ -63,6 +63,8 @@ MODEL_REGISTRY = {
 
 try:
     from open_biomed.models.cell.langcell.langcell import LangCell
-    MODEL_REGISTRY["cell_annotation"]["langcell"] = LangCell
+    MODEL_REGISTRY["cell_annotation"] = {
+        "langcell": LangCell,
+    }
 except ImportError:
     logging.warn("Install geneformer to use LangCell: pip install geneformer")

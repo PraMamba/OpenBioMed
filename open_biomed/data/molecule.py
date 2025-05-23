@@ -379,3 +379,54 @@ def calc_mol_rmsd(mol1: Molecule, mol2: Molecule) -> float:
         return Chem.rdMolAlign.CalcRMS(mol1.rdmol, mol2.rdmol, maxMatches=30000)
     except Exception:
         return 1e4
+
+class MoleculeQEDTool(Tool):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def print_usage(self) -> str:
+        return "Calculate the drug-likeness (QED score) of a molecule"
+
+    def run(self, molecule: Molecule) -> float:
+        return molecule.calc_qed()
+
+class MoleculeSATool(Tool):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def print_usage(self) -> str:
+        return "Calculate the synthetic accessibility (SA score) of a molecule"
+
+    def run(self, molecule: Molecule) -> float:
+        return molecule.calc_sa()
+
+class MoleculeLogPTool(Tool):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def print_usage(self) -> str:
+        return "Calculate the solubility (LogP score) of a molecule"
+
+    def run(self, molecule: Molecule) -> float:
+        return molecule.calc_logp()
+
+class MoleculeLipinskiTool(Tool):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def print_usage(self) -> str:
+        return "Calculate the number of lipinski rules that a molecule satisfies"
+
+    def run(self, molecule: Molecule) -> float:
+        return molecule.calc_lipinski()
+
+class MoleculeSimilarityTool(Tool):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def print_usage(self) -> str:
+        return "Calculate the Morgan fingerprint similarity of two molecules"
+
+    def run(self, mol1: Molecule, mol2: Molecule) -> float:
+        return molecule_fingerprint_similarity(mol1, mol2, fingerprint_type="morgan")
+        

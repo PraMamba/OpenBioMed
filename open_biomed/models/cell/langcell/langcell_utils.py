@@ -41,13 +41,13 @@ from transformers.utils import logging
 from transformers.models.bert.configuration_bert import BertConfig
 from transformers import DataCollatorWithPadding
 
+
 from geneformer import DataCollatorForCellClassification
 from geneformer import TranscriptomeTokenizer
 from geneformer.tokenizer import tokenize_cell
 from geneformer.collator_for_classification import PrecollatorForGeneAndCellClassification
 from geneformer.pretrainer import token_dictionary
 token_dictionary['<cls>'] = len(token_dictionary)
-
 logger = logging.get_logger(__name__)
 
 

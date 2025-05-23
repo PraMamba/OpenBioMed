@@ -6,12 +6,14 @@ from datetime import datetime
 import numpy as np
 import os
 import pickle
-import scanpy as sc
+try:
+    import scanpy as sc
+except ImportError:
+    raise ImportError("Install scanpy to use cell APIs: pip install scanpy")
 import re
 
 from open_biomed.core.tool import Tool
 from open_biomed.data.text import Text
-from open_biomed.utils.exception import MoleculeConstructError
 
 class Cell:
     def __init__(self) -> None:

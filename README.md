@@ -148,6 +148,9 @@ python
 >>> import nltk
 >>> nltk.download('wordnet')
 >>> nltk.download('omw-1.4')
+
+# For LangCell
+pip install geneformer
 ```
 
 After downloading the dependencies, you can run the following command to install the package and use our APIs more conveniently:

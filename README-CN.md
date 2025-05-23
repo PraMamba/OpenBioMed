@@ -133,6 +133,9 @@ python
 >>> import nltk
 >>> nltk.download('wordnet')
 >>> nltk.download('omw-1.4')
+
+# LangCell依赖
+pip install geneformer
 ```
 
 下载依赖后，您可以运行以下命令安装OpenBioMed包，从而更方便地使用我们的接口：

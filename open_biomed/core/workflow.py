@@ -297,7 +297,7 @@ class Workflow():
                                 elif key == "protein":
                                     vis_process.append(value.save_pdb())
                                 elif key == "pocket":
-                                    vis_process.append(alue.save_binary())
+                                    vis_process.append(value.save_binary())
                         subprocess.Popen(vis_process).communicate()
                         outputs = open("./tmp/visualization_file.txt", "r").read()
                         outputs = [outputs], [outputs]

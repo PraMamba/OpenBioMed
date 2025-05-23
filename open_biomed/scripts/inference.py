@@ -1,6 +1,8 @@
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+import torch
+torch.set_printoptions(precision=4, sci_mode=False)
 
 import argparse
 
@@ -51,14 +53,28 @@ def test_structure_based_drug_design():
         task="structure_based_drug_design",
         model="pharmolix_fm",
         model_ckpt="./checkpoints/server/pharmolix_fm.ckpt",
+        # model="molcraft",
+        # model_ckpt="./checkpoints/molcraft/last_updated.ckpt",
         device="cuda:0"
     )
-    protein = Protein.from_pdb_file("./checkpoints/server/test_data/4xli_B.pdb")
-    ligand = Molecule.from_sdf_file("./checkpoints/server/test_data/4xli_B_ref.sdf")
+    # protein = Protein.from_pdb_file("./checkpoints/server/test_data/4xli_B.pdb")
+    # ligand = Molecule.from_sdf_file("./checkpoints/server/test_data/4xli_B_ref.sdf")
+    import os
+    # os.system("rm ./tmp/debug_traj_*")
+    protein = Protein.from_pdb_file("./datasets/structure_based_drug_design/CrossDocked/test_set/ATS5_HUMAN_262_480_0/3hy9_B_rec.pdb")
+    ligand = Molecule.from_sdf_file("./datasets/structure_based_drug_design/CrossDocked/test_set/ATS5_HUMAN_262_480_0/3hy9_B_rec_3hyg_099_lig_tt_min_0.sdf")
+    from pytorch_lightning import seed_everything
+    seed_everything(1234)
     pocket = Pocket.from_protein_ref_ligand(protein, ligand)
-    outputs = pipeline.run(
-        pocket=pocket
-    )
+    pocket.estimated_num_atoms = ligand.get_num_atoms()
+    for i in range(1):
+        outputs = pipeline.run(
+            pocket=pocket
+        )
+        print(outputs[0][0])
+        print(outputs[0][0].conformer)
+    from open_biomed.tasks.aidd_tasks.structure_based_drug_design import calc_vina_molecule_metrics
+    print(calc_vina_molecule_metrics(outputs[0][0], protein))
     print(outputs)
     return pipeline
 

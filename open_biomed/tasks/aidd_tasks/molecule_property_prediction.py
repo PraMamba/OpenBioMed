@@ -122,10 +122,6 @@ class MoleculePropertyPredictionEvaluationCallback(pl.Callback):
         if trainer.is_global_zero:
             with open(output_path + "_outputs.txt", "w") as f:
                 f.write(output_str)
-
-
-
-
         
     def on_test_batch_end(self,
         trainer: pl.Trainer,
@@ -148,3 +144,4 @@ class MoleculePropertyPredictionEvaluationCallback(pl.Callback):
         pl_module: pl.LightningModule
     ) -> None:
         self.on_validation_epoch_end(trainer, pl_module)
+        

@@ -283,14 +283,15 @@ class InferencePipeline(Pipeline, Tool):
     def setup_model(self):
         self.model = self.task.get_model_wrapper(self.cfg.model, None)
         self.featurizer, self.collator = self.model.get_featurizer()
-        logging.info(f"Loading model from {self.cfg.model_ckpt}")
-        state_dict = torch.load(open(self.cfg.model_ckpt, "rb"), map_location="cpu")
-        if "state_dict" in state_dict:
-            state_dict = state_dict["state_dict"]
-        if hasattr(self.model.model, "load_ckpt"):
-            self.model.model.load_ckpt(state_dict)
-        else:
-            logging.info(self.model.load_state_dict(state_dict, strict=False))
+        if os.path.isdir(self.cfg.model_ckpt):
+            logging.info(f"Loading model from {self.cfg.model_ckpt}")
+            state_dict = torch.load(open(self.cfg.model_ckpt, "rb"), map_location="cpu")
+            if "state_dict" in state_dict:
+                state_dict = state_dict["state_dict"]
+            if hasattr(self.model.model, "load_ckpt"):
+                self.model.model.load_ckpt(state_dict)
+            else:
+                self.model.load_state_dict(state_dict, strict=False)
         self.model.model.eval()
         self.model.to(self.cfg.device)
 
@@ -329,7 +330,7 @@ class InferencePipeline(Pipeline, Tool):
                         else:
                             raise e
             batch_size = self.best_batch_size
-        else:
+        elif batch_size == "max":
             batch_size = num_samples
         
         outputs = [None for i in range(num_samples)]
@@ -346,7 +347,7 @@ class InferencePipeline(Pipeline, Tool):
                         # Generation failure, restart
                         new_retry_idx.append(retry_idx[j])
                     else:
-                        outputs[i * batch_size + retry_idx[j]] = output
+                        outputs[retry_idx[j]] = output
                 retry_idx = new_retry_idx
                 retry_times += 1
 

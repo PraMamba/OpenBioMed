@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     g++ \
     cmake \
+    zip \
     curl \
     ca-certificates \
     git \

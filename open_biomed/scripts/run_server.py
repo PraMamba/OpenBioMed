@@ -5,6 +5,7 @@ import uvicorn
 import random
 import copy
 import asyncio
+import logging
 import subprocess
 from typing import Optional, List, Dict, Callable, Any
 
@@ -91,7 +92,7 @@ class TaskRequest(BaseModel):
     task: str
     model: Optional[str] = None
     config: Optional[str] = None
-    visualize_config: Optional[str] = None
+    visualize: Optional[str] = None
     molecule: Optional[str] = None
     protein: Optional[str] = None
     pocket: Optional[str] = None
@@ -180,7 +181,7 @@ def handle_visualize_molecule(request: TaskRequest, pipeline):
     vis_process = [
                     "python3", "./open_biomed/core/visualize.py", 
                     "--task", "visualize_molecule",
-                    "--molecule_config", request.visualize_config,
+                    "--molecule_config", request.visualize,
                     "--save_output_filename", "./tmp/molecule_visualization_file.txt",
                     "--molecule", request.molecule]
     subprocess.Popen(vis_process).communicate()
@@ -316,7 +317,7 @@ def handle_visualize_protein(request: TaskRequest, pipeline):
     vis_process = [
                     "python3", "./open_biomed/core/visualize.py", 
                     "--task", "visualize_protein",
-                    "--protein_config", request.config,
+                    "--protein_config", request.visualize,
                     "--save_output_filename", "./tmp/protein_visualization_file.txt",
                     "--protein", request.protein]
     subprocess.Popen(vis_process).communicate()
@@ -402,7 +403,7 @@ TASK_CONFIGS = [
     },
     {
         "task_name": "visualize_molecule",
-        "required_inputs": ["visualize_config", "molecule"],
+        "required_inputs": ["visualize", "molecule"],
         "pipeline_key": "visualize_molecule",
         "handler_function": handle_visualize_molecule,
         "is_async": False
@@ -416,7 +417,7 @@ TASK_CONFIGS = [
     },
     {
         "task_name": "visualize_protein",
-        "required_inputs": ["protein"],
+        "required_inputs": ["visualize", "protein"],
         "pipeline_key": "visualize_protein",
         "handler_function": handle_visualize_protein,
         "is_async": False
@@ -555,7 +556,7 @@ for task_config in TASK_CONFIGS:
 @app.post("/run_pipeline/")
 async def run_pipeline(request: TaskRequest):
     task_name = request.task.lower()
-
+    logging.info(request)
     try:
         task_config = task_loader.get_task(task_name)
         task_config.validate_inputs(request.model_dump())
@@ -585,6 +586,10 @@ async def web_search(request: SearchRequest):
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@app.get("/healthz")
+def ping():
+    return "Service available"
 
 
 if __name__ == "__main__":

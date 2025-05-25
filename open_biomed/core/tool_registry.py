@@ -62,13 +62,15 @@ class LazyDictForTool(dict):
         elif key == "export_protein":
             self[key] = ExportProtein()
         elif key == "molecule_qed":
-            self[key] = MoleculeQEDTool()
+            self[key] = MoleculeQEDTool()  # TODO
         elif key == "molecule_sa":
             self[key] = MoleculeSATool()
         elif key == "molecule_logp":
             self[key] = MoleculeLogPTool()
         elif key == "molecule_lipinski":
             self[key] = MoleculeLipinskiTool()
+        elif key == "molecule_property_calculation":
+            self[key] = MoleculePropertyCalculationTool()
         elif key == "molecule_similarity":
             self[key] = MoleculeSimilarityTool()
         else:

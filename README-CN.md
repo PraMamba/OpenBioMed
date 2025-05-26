@@ -19,7 +19,7 @@
 
 ## 更新信息 🎉
 
-- [2025/05/25] 🔥 我们的框架进行了功能更新，包括新的工具、数据集和模型。我们实现了**LangCell** (📃[论文](https://arxiv.org/abs/2405.06708), 🤖[模型](https://drive.google.com/drive/folders/1cuhVG9v0YoAnjW-t_WMpQQguajumCBTp?usp=sharing), 📎[引用](#to-cite-langcell)) 和细胞数据处理接口（见[示例](./examples/cell_annotation.ipynb))。我们还推出了ADMET、QED、SA、LogP、Lipinski、相似性等分子性质预测工具。
+- [2025/05/26] 🔥 我们的框架进行了功能更新，包括新的工具、数据集和模型。我们实现了**LangCell** (📃[论文](https://arxiv.org/abs/2405.06708), 🤖[模型](https://drive.google.com/drive/folders/1cuhVG9v0YoAnjW-t_WMpQQguajumCBTp?usp=sharing), 📎[引用](#to-cite-langcell)) 和细胞数据处理接口（见[示例](./examples/cell_annotation.ipynb))。我们还推出了ADMET、QED、SA、LogP、Lipinski、相似性等分子性质预测工具。
 
 - [2025/03/07] 🔥 发布**OpenBioMed生物医药智能体开发平台**，可通过[该链接](http://openbiomed.pharmolix.com)访问。该平台能帮助研发人员零门槛使用AI模型定制化自己的科学研究助手（**AutoPilot**）。平台的[使用文档](https://www.zybuluo.com/icycookies/note/2587490)已经同步发布。
 

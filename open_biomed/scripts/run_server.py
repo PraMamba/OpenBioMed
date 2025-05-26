@@ -7,7 +7,7 @@ import copy
 import asyncio
 import logging
 import subprocess
-from typing import Optional, List, Dict, Callable, Any
+from typing import Optional, List, Dict, Callable, Any, Literal
 
 # import function
 from open_biomed.data import Molecule, Text, Protein, Pocket
@@ -101,6 +101,11 @@ class TaskRequest(BaseModel):
     query: Optional[str] = None
     mutation: Optional[str] = None
     indices: Optional[str] = None
+    property: Optional[Literal["QED", "SA", "LogP", "Lipinski"]] = None
+    molecule_1: Optional[str] = None
+    molecule_2: Optional[str] = None
+    similarity: Optional[float] = None
+    value: Optional[str] = None
 
 
 class SearchRequest(BaseModel):
@@ -369,7 +374,21 @@ def handle_import_pocket(request: TaskRequest, pipeline):
     pockets, files = pipeline.run([protein], [indices])
     return {"task": request.task, "pocket": files[0], "pocket_preview": str(pockets[0])}
 
+# 25
+def handle_molecule_similarity(request: TaskRequest, pipeline):
+    required_inputs = ["molecule_1", "molecule_2"]
+    molecule_1 = IO_Reader.get_molecule(request.molecule_1)
+    molecule_2 = IO_Reader.get_molecule(request.molecule_2)
+    outputs = pipeline.run(molecule_1=molecule_1, molecule_2=molecule_2)
+    return {"task": request.task, "model":request.model, "similarity": outputs}
 
+# 26
+def handle_molecule_property_calculation(request: TaskRequest, pipeline):
+    required_inputs = ["molecule", "property"]
+    molecule = IO_Reader.get_molecule(request.molecule)
+    property = request.property
+    outputs = pipeline.run(molecule=molecule, property=property)
+    return {"task": request.task, "model":request.model, "score": round(outputs, 5)}
 
 
 TASK_CONFIGS = [
@@ -532,6 +551,20 @@ TASK_CONFIGS = [
         "required_inputs": ["pocket", "indices"],
         "pipeline_key": "import_pocket",
         "handler_function": handle_import_pocket,
+        "is_async": False
+    },
+    {
+        "task_name": "molecule_similarity", # 25
+        "required_inputs": ["molecule_1", "molecule_2"],
+        "pipeline_key": "molecule_similarity",
+        "handler_function": handle_molecule_similarity,
+        "is_async": False
+    },
+    {
+        "task_name": "molecule_property_calculation", # 25
+        "required_inputs": ["molecule", "property"],
+        "pipeline_key": "molecule_property_calculation",
+        "handler_function": handle_molecule_property_calculation,
         "is_async": False
     }
     

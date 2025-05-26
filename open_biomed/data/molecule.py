@@ -420,6 +420,35 @@ class MoleculeLipinskiTool(Tool):
     def run(self, molecule: Molecule) -> float:
         return molecule.calc_lipinski()
 
+
+class MoleculePropertyCalculationTool:
+    def __init__(self):
+        """
+        Initialize the calculator with a mapping of property names to their corresponding tool classes.
+        """
+        # Map property names to their corresponding tool classes
+        self.tool_map = {
+            "QED": MoleculeQEDTool,
+            "SA": MoleculeSATool,
+            "LogP": MoleculeLogPTool,
+            "Lipinski": MoleculeLipinskiTool,
+        }
+
+    def run(self, molecule: Molecule, property: str) -> float:
+        """
+        Calculate the specified property for the given molecule using the appropriate tool.
+
+        :param molecule: The molecule object to calculate the property for.
+        :param property: The name of the property to calculate (e.g., "QED", "SA", "LogP", "Lipinski").
+        :return: The calculated property value.
+        """
+        if property not in self.tool_map:
+            raise ValueError(f"Unknown property: {property}")
+
+        tool_class = self.tool_map[property]
+        tool_instance = tool_class()
+        return tool_instance.run(molecule)
+
 class MoleculeSimilarityTool(Tool):
     def __init__(self) -> None:
         super().__init__()
@@ -427,6 +456,6 @@ class MoleculeSimilarityTool(Tool):
     def print_usage(self) -> str:
         return "Calculate the Morgan fingerprint similarity of two molecules"
 
-    def run(self, mol1: Molecule, mol2: Molecule) -> float:
-        return molecule_fingerprint_similarity(mol1, mol2, fingerprint_type="morgan")
+    def run(self, molecule_1: Molecule, molecule_2: Molecule) -> float:
+        return molecule_fingerprint_similarity(molecule_1, molecule_2, fingerprint_type="morgan")
         

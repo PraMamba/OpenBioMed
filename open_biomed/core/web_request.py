@@ -196,7 +196,7 @@ class WebSearchRequester(Tool):
             'Content-Type': 'application/json',
             'Authorization': 'Bearer 1234567890'
         }
-        query_url = "http://pre.chatdd.pharmolix.com/v2/api/deepinsight/generate_query"
+        query_url = "https://staging.chatdd.pharmolix.com/v2/api/deepinsight/generate_query"
         data = {
             'chat_session_id': "FwAalhadkajhddkaadfwes",
             'action': False,

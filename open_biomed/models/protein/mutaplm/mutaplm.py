@@ -469,6 +469,7 @@ class MutaPLM(MutationExplanationModel, MutationEngineeringModel):
                 eos_token_id=self.llm_tokenizer.eos_token_id,
                 pad_token_id=self.llm_tokenizer.pad_token_id,
                 **self.config.text_generation.todict(),
+                max_new_tokens=512
             )
             outputs_effect[outputs_effect == 0] = 2 # convert output id 0 to 2 (eos_token_id)
             output_effect_text = self.llm_tokenizer.batch_decode(outputs_effect, skip_special_tokens=True)

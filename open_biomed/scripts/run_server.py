@@ -264,7 +264,9 @@ async def handle_molecule_structure_request(request: SearchRequest, requester):
 async def handle_protein_uniprot_request(request: SearchRequest, requester):
     outputs = await requester.run(request.query)
     outputs = outputs[1][0]
-    return {"task": request.task, "text": outputs}
+    protein = IO_Reader.get_protein(outputs)
+    protein_preview = str(protein)
+    return {"task": request.task, "protein": outputs, "protein_preview": protein_preview}
 
 
 async def handle_protein_pdb_request(request: SearchRequest, requester):

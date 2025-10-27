@@ -31,24 +31,36 @@ from transformers.modeling_outputs import (
     SequenceClassifierOutput,
     TokenClassifierOutput,
 )
-from transformers.modeling_utils import (
-    PreTrainedModel,
-    apply_chunking_to_forward,
-    find_pruneable_heads_and_indices,
-    prune_linear_layer,
-)
+try:
+    from transformers.pytorch_utils import (
+        apply_chunking_to_forward,
+        find_pruneable_heads_and_indices,
+        prune_linear_layer,
+    )
+except ImportError:
+    try:
+        from transformers.modeling_utils import (
+            apply_chunking_to_forward,
+            find_pruneable_heads_and_indices,
+            prune_linear_layer,
+        )
+    except ImportError:
+        from open_biomed.models.cell.langcell._transformers_compat import (
+            apply_chunking_to_forward,
+            find_pruneable_heads_and_indices,
+            prune_linear_layer,
+        )
 from transformers.utils import logging
 from transformers.models.bert.configuration_bert import BertConfig
 from transformers import DataCollatorWithPadding
+from transformers import PreTrainedModel
 
 
 from geneformer import DataCollatorForCellClassification
 from geneformer import TranscriptomeTokenizer
 from geneformer.tokenizer import tokenize_cell
 from geneformer.collator_for_classification import PrecollatorForGeneAndCellClassification
-from geneformer.pretrainer import token_dictionary
-token_dictionary['<cls>'] = len(token_dictionary)
-logger = logging.get_logger(__name__)
+from open_biomed.models.cell.langcell._geneformer_compat import token_dictionary, vocab_size
 
 
 class BertEmbeddings(nn.Module):
@@ -958,14 +970,27 @@ class BertLMHeadModel(BertPreTrainedModel):
         return reordered_past
 
 class LangCellPrecollatorForGeneAndCellClassification(PrecollatorForGeneAndCellClassification):
-    cls_token = "<cls>"
-    cls_token_id = token_dictionary.get("<cls>")
-    all_special_ids = [
-        token_dictionary.get('<cls>'),
-        token_dictionary.get("<mask>"),
-        token_dictionary.get("<pad>"),
-    ]
-    token_dictionary = token_dictionary
+    def __init__(self, token_dict=None):
+        # Use provided token_dict or import from geneformer_compat
+        if token_dict is None:
+            from open_biomed.models.cell.langcell._geneformer_compat import token_dictionary
+            token_dict = token_dictionary
+        
+        # Pass token_dictionary to parent class via kwargs
+        super().__init__(token_dictionary=token_dict)
+        
+        # Add cls token to the special ids list
+        self._cls_token = "<cls>"
+        self._cls_token_id = self.token_dictionary.get("<cls>")
+        self._all_special_ids.append(self.token_dictionary.get('<cls>'))
+    
+    @property
+    def cls_token(self):
+        return self._cls_token
+    
+    @property
+    def cls_token_id(self):
+        return self._cls_token_id
 
     def _convert_token_to_id_with_added_voc(self, token):
         if token is None:
@@ -978,9 +1003,23 @@ class LangCellPrecollatorForGeneAndCellClassification(PrecollatorForGeneAndCellC
     
 class LangCellDataCollatorForCellClassification(DataCollatorForCellClassification):
     def __init__(self, add_cls=True, *args, **kwargs):
+        # Import token_dictionary from geneformer
+        if 'token_dictionary' not in kwargs:
+            try:
+                from open_biomed.models.cell.langcell._geneformer_compat import token_dictionary
+                kwargs['token_dictionary'] = token_dictionary
+            except ImportError:
+                from geneformer import TOKEN_DICTIONARY_FILE
+                import pickle
+                with open(TOKEN_DICTIONARY_FILE, 'rb') as f:
+                    kwargs['token_dictionary'] = pickle.load(f)
+        
+        # Store token_dictionary for later use
+        token_dict = kwargs['token_dictionary']
+        
         super().__init__(*args, **kwargs)
         self.add_cls = add_cls
-        self.tokenizer = LangCellPrecollatorForGeneAndCellClassification()
+        self.tokenizer = LangCellPrecollatorForGeneAndCellClassification(token_dict=token_dict)
         # self.text_collator = DataCollatorWithPadding(kwargs['text_tokenizer'], padding=False),
 
     def _prepare_batch(self, features):

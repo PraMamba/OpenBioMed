@@ -44,7 +44,11 @@ class LangCell(CellAnnotation):
         self.cell_encoder.pooler = LangCell_Pooler(self.cell_encoder.config, pretrained_proj=model_cfg.cell_proj, proj_dim=256)
         proj = self.cell_encoder.pooler.proj
 
-        self.tokenizer = BertTokenizer.from_pretrained(model_cfg.text_model)
+        # Use text_tokenizer if available, otherwise fallback to text_model or default
+        tokenizer_path = getattr(model_cfg, 'text_tokenizer', None) or getattr(model_cfg, 'text_model', None)
+        if tokenizer_path is None or not os.path.exists(tokenizer_path):
+            tokenizer_path = "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext"
+        self.tokenizer = BertTokenizer.from_pretrained(tokenizer_path)
         self.tokenizer.add_special_tokens({'bos_token':'[DEC]'})
         self.tokenizer.add_special_tokens({'additional_special_tokens':['[ENC]']})       
         self.tokenizer.enc_token_id =  self.tokenizer.additional_special_tokens_ids[0] 

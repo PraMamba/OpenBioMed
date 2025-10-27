@@ -18,6 +18,7 @@ from torch_geometric.data import Data
 from torch_geometric.nn import radius_graph, knn_graph
 from torch_scatter import scatter_softmax, scatter_sum
 from tqdm import tqdm
+from typing import List, Dict, Optional
 
 from open_biomed.data import Molecule, MoleculeConstructError, Pocket, estimate_ligand_atom_num
 from open_biomed.models.task_models.structure_based_drug_design import StructureBasedDrugDesignModel
@@ -1182,6 +1183,6 @@ class MolCRAFT(StructureBasedDrugDesignModel):
         pass
 
     @torch.no_grad()
-    def predict_structure_based_drug_design(self, pocket: Featurized[Pocket]) -> F.List[Molecule]:
+    def predict_structure_based_drug_design(self, pocket: Featurized[Pocket]) -> List[Molecule]:
        molecule = self.create_dummy_molecule(pocket)
        return self.sample(molecule, pocket)

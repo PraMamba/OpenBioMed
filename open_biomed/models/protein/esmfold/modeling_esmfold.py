@@ -22,7 +22,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.nn import LayerNorm
-from transformers.deepspeed import is_deepspeed_available
+from transformers.integrations.deepspeed import is_deepspeed_available
 from transformers.modeling_outputs import ModelOutput
 from transformers.utils import (
     ContextManagers,
@@ -34,7 +34,8 @@ from transformers.utils import (
 )
 
 from transformers.models.esm.configuration_esm import EsmConfig
-from transformers.models.esm.modeling_esm import ESM_START_DOCSTRING, EsmModel, EsmPreTrainedModel
+from open_biomed.models.protein.esmfold._esm_compat import ESM_START_DOCSTRING, EsmPreTrainedModel
+from transformers.models.esm.modeling_esm import EsmModel
 from transformers.models.esm.openfold_utils import (
     OFProtein,
     Rigid,

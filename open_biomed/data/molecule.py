@@ -12,8 +12,18 @@ from rdkit import Chem, DataStructs, RDLogger
 RDLogger.DisableLog("rdApp.*")
 from rdkit.Chem import AllChem, MACCSkeys, rdMolDescriptors, Descriptors, Lipinski
 from rdkit.Chem.AllChem import RWMol
-from rdkit.six import iteritems
-from rdkit.six.moves import cPickle
+
+# from rdkit.six import iteritems
+# from rdkit.six.moves import cPickle
+
+import sys
+if sys.version_info[0] >= 3:
+    iteritems = dict.items
+    import pickle as cPickle
+else:
+    from six import iteritems
+    import cPickle
+
 import re
 
 from open_biomed.core.tool import Tool

@@ -33,7 +33,26 @@ from transformers.modeling_outputs import (
     TokenClassifierOutput,
     ModelOutput,
 )
-from transformers.modeling_utils import PreTrainedModel, find_pruneable_heads_and_indices, prune_linear_layer
+# from transformers.modeling_utils import PreTrainedModel, find_pruneable_heads_and_indices, prune_linear_layer
+from transformers.modeling_utils import PreTrainedModel
+
+try:
+    from ._prune_patch import (
+        find_pruneable_heads_and_indices,
+        prune_linear_layer,
+    )
+except ImportError:  # 万一路径不同，再试旧版
+    try:
+        from transformers.modeling_utils import (
+            find_pruneable_heads_and_indices,
+            prune_linear_layer,
+        )
+    except ImportError:
+        from transformers._prune_utils import (
+            find_pruneable_heads_and_indices,
+            prune_linear_layer,
+        )
+
 from transformers.utils import logging
 from transformers.models.esm.configuration_esm import EsmConfig
 

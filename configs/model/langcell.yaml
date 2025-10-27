@@ -1,8 +1,8 @@
 model:
   name: langcell
-  cell_model: ./checkpoints/langcell/cell_bert
-  cell_proj: ./checkpoints/langcell/cell_proj.bin
-  text_tokenizer: ./checkpoints/langcell/pubmedbert-base
-  text_model: ./checkpoints/langcell/text_bert
-  text_proj: ./checkpoints/langcell/text_proj.bin
-  ctm_head: ./checkpoints/langcell/ctm_head.bin
+  cell_model: /data/Mamba/Project/Single_Cell/Benchmark/LangCell/ckpt/cell_bert
+  cell_proj: /data/Mamba/Project/Single_Cell/Benchmark/LangCell/ckpt/cell_proj.bin
+  text_tokenizer: /data/Mamba/Project/Single_Cell/Benchmark/LangCell/ckpt/pubmedbert-base
+  text_model: /data/Mamba/Project/Single_Cell/Benchmark/LangCell/ckpt/text_bert
+  text_proj: /data/Mamba/Project/Single_Cell/Benchmark/LangCell/ckpt/text_proj.bin
+  ctm_head: /data/Mamba/Project/Single_Cell/Benchmark/LangCell/ckpt/ctm_head.bin

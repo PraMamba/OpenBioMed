@@ -2,6 +2,7 @@ import os
 from typing import Any, Dict, List, Optional, Tuple
 import torch, json
 import torch.nn as nn, torch.nn.functional as F
+import warnings
 from transformers import PreTrainedTokenizer, BertModel, BertTokenizer
 from open_biomed.data import Cell, Text
 from open_biomed.models.cell.langcell.langcell_utils import BertModel as MedBertModel, LangCellDataCollatorForCellClassification as DataCollatorForCellClassification
@@ -40,7 +41,11 @@ class LangCell(CellAnnotation):
     def __init__(self, model_cfg: Config):
         super().__init__(model_cfg)
 
-        self.cell_encoder = BertModel.from_pretrained(model_cfg.cell_model)
+        # Suppress pooler weight warnings as we replace pooler with custom LangCell_Pooler
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message=".*Some weights of BertModel were not initialized.*pooler.*")
+            self.cell_encoder = BertModel.from_pretrained(model_cfg.cell_model)
+        
         self.cell_encoder.pooler = LangCell_Pooler(self.cell_encoder.config, pretrained_proj=model_cfg.cell_proj, proj_dim=256)
         proj = self.cell_encoder.pooler.proj
 
@@ -53,7 +58,11 @@ class LangCell(CellAnnotation):
         self.tokenizer.add_special_tokens({'additional_special_tokens':['[ENC]']})       
         self.tokenizer.enc_token_id =  self.tokenizer.additional_special_tokens_ids[0] 
 
-        self.text_encoder = MedBertModel.from_pretrained(model_cfg.text_model, add_pooling_layer=True)
+        # Suppress pooler weight warnings as we replace pooler with custom LangCell_Pooler
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message=".*Some weights of BertModel were not initialized.*pooler.*")
+            self.text_encoder = MedBertModel.from_pretrained(model_cfg.text_model, add_pooling_layer=True)
+        
         self.text_encoder.pooler = LangCell_Pooler(self.text_encoder.config, pretrained_proj=model_cfg.text_proj, proj_dim=256)
 
         self.ctm_head = nn.Linear(self.text_encoder.config.hidden_size, 2)
@@ -76,7 +85,16 @@ class LangCell(CellAnnotation):
         return text
 
     def encode_cell(self, cell_input_ids):
-        cell = self.cell_encoder(cell_input_ids)
+        # Ensure cell_input_ids is a dict with input_ids and attention_mask
+        if isinstance(cell_input_ids, dict):
+            cell = self.cell_encoder(**cell_input_ids)
+        else:
+            # If it's not a dict, assume it's input_ids only and create attention_mask
+            if isinstance(cell_input_ids, torch.Tensor):
+                attention_mask = torch.ones_like(cell_input_ids)
+            else:
+                attention_mask = None
+            cell = self.cell_encoder(input_ids=cell_input_ids, attention_mask=attention_mask)
         cell_last_h = cell.last_hidden_state
         cell_pooler = cell.pooler_output
         return cell_last_h, cell_pooler
@@ -109,7 +127,23 @@ class LangCell(CellAnnotation):
             self.text_input_ids_cache = class_texts['input_ids']
             self.text_embs_cache = text_embs
 
-        cell_last_h, cellemb = self.encode_cell(cell) # batchsize * 256
+        # Ensure cell is passed as a dict with input_ids and attention_mask
+        if isinstance(cell, dict):
+            # If cell is a dict, extract input_ids and attention_mask
+            cell_input = {'input_ids': cell.get('cell', cell.get('input_ids')), 
+                         'attention_mask': cell.get('attention_mask')}
+        elif hasattr(cell, 'cell') and hasattr(cell, 'attention_mask'):
+            # If cell is an object with cell and attention_mask attributes
+            cell_input = {'input_ids': cell.cell, 'attention_mask': cell.attention_mask}
+        else:
+            # Fallback: assume cell is input_ids tensor and create attention_mask
+            if isinstance(cell, torch.Tensor):
+                cell_input = {'input_ids': cell, 'attention_mask': torch.ones_like(cell)}
+            else:
+                # Last resort: try to use cell directly
+                cell_input = cell
+        
+        cell_last_h, cellemb = self.encode_cell(cell_input) # batchsize * 256
         sim = (cellemb @ text_embs) / 0.05 # batchsize * 161
         sim_logit = F.softmax(sim, dim=-1)
         # print(sim.shape)

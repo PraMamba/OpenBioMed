@@ -1036,8 +1036,20 @@ class LangCellDataCollatorForCellClassification(DataCollatorForCellClassificatio
         for f in features:
             assert f['class_texts']['input_ids'].equal(features[0]['class_texts']['input_ids']), "All class texts should be the same"
         class_texts = features[0]['class_texts']
-        batch = {'cell': torch.tensor(batch['input_ids'], dtype=torch.int64),
-                 'attention_mask': torch.tensor(batch['attention_mask'], dtype=torch.int64),
+        
+        # Convert to tensor if needed, using detach().clone() for existing tensors
+        if isinstance(batch['input_ids'], torch.Tensor):
+            cell_tensor = batch['input_ids'].detach().clone().to(dtype=torch.int64)
+        else:
+            cell_tensor = torch.tensor(batch['input_ids'], dtype=torch.int64)
+        
+        if isinstance(batch['attention_mask'], torch.Tensor):
+            attention_mask_tensor = batch['attention_mask'].detach().clone().to(dtype=torch.int64)
+        else:
+            attention_mask_tensor = torch.tensor(batch['attention_mask'], dtype=torch.int64)
+        
+        batch = {'cell': cell_tensor,
+                 'attention_mask': attention_mask_tensor,
                  'label': labels,
                  'class_texts': class_texts}
         return batch

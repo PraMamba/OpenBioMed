@@ -21,11 +21,11 @@ cd ~/OpenBioMed
 # ============================================================================
 # Configuration
 # ============================================================================
-DATASET_ID="${1:-A013}"  # Default to A013 if not specified
+DATASET_ID="${1:-D099_sampled_0.1}"  
 BASE_DATA_DIR="/data/Mamba/Project/Single_Cell/Benchmark/Cell_Type/LangCell/Processed_Data"
-OUTPUT_DIR="/data/Mamba/Project/Single_Cell/Benchmark/Cell_Type/LangCell/A013/eval_results"
+OUTPUT_DIR="/data/Mamba/Project/Single_Cell/Benchmark/Cell_Type/LangCell/D099_sampled_0.1/eval_results"
 BATCH_SIZE="${2:-2}"  # Default batch size is 4
-DEVICE="${3:-cuda:0}"  # Default device
+DEVICE="${3:-cuda:5}"  # Default device
 DATA_DIR="${BASE_DATA_DIR}/${DATASET_ID}"
 
 

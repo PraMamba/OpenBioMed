@@ -157,3 +157,6 @@ cython_debug/
 *.txt
 !requirements.txt
 *.pth
+*.png
+*.json
+

@@ -337,7 +337,7 @@ class InferencePipeline(Pipeline, Tool):
         for i in tqdm(range((num_samples - 1) // batch_size + 1), desc="Inference Steps"):
             # Generate a output text that both LLM and experts can understand
             retry_times = 0
-            retry_idx = range(i * batch_size, (i + 1) * batch_size)
+            retry_idx = range(i * batch_size, min((i + 1) * batch_size, num_samples))
             while retry_times < self.retry_limit and len(retry_idx) > 0:
                 inputs = [featurized[idx] for idx in retry_idx]
                 batch_output = self.model.predict(self.model.transfer_batch_to_device(self.collator(inputs), self.cfg.device, 0))
